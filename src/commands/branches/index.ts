@@ -13,14 +13,14 @@ hello friend from oclif! (./src/commands/hello/index.ts)
     from: Flags.string({
       char: "f",
       description: "Who is saying branches",
-      required: true,
+      required: false,
     }),
   };
 
   static args = {
     person: Args.string({
       description: "Person to say branches to",
-      required: true,
+      required: false,
     }),
   };
 
