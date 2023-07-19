@@ -1,0 +1,77 @@
+{
+  "name": "gitx",
+  "version": "0.0.0",
+  "description": "Extended Git tools",
+  "author": "Edward Salter @EdwardSalter",
+  "bin": {
+    "gitx": "./bin/run"
+  },
+  "homepage": "https://github.com/EdwardSalter/gitx",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "repository": "EdwardSalter/gitx",
+  "files": [
+    "/bin",
+    "/dist",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "dependencies": {
+    "@oclif/core": "^2.9.4",
+    "@oclif/plugin-help": "^5.2.14",
+    "@oclif/plugin-plugins": "^3.1.7",
+    "simple-git": "^3.19.1"
+  },
+  "devDependencies": {
+    "@oclif/test": "^2.3.31",
+    "@types/chai": "^4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.4.2",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "chai": "^4",
+    "eslint": "^8.45.0",
+    "eslint-config-oclif": "^4",
+    "eslint-config-oclif-typescript": "^1.0.3",
+    "eslint-plugin-node": "^11.1.0",
+    "mocha": "^10.2.0",
+    "oclif": "^3",
+    "prettier": "^3.0.0",
+    "shx": "^0.3.4",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.6.0",
+    "typescript": "^5.1.6"
+  },
+  "oclif": {
+    "bin": "gitx",
+    "dirname": "gitx",
+    "commands": "./dist/commands",
+    "plugins": [
+      "@oclif/plugin-help",
+      "@oclif/plugin-plugins"
+    ],
+    "topicSeparator": " ",
+    "topics": {
+      "hello": {
+        "description": "Say hello to the world and others"
+      }
+    }
+  },
+  "scripts": {
+    "dev": "node ./bin/dev",
+    "build": "shx rm -rf dist && tsc -b",
+    "lint": "eslint . --ext .ts --config .eslintrc",
+    "postpack": "shx rm -f oclif.manifest.json",
+    "posttest": "npm run lint",
+    "prepack": "npm run build && oclif manifest && oclif readme",
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif readme && git add README.md"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "bugs": "https://github.com/EdwardSalter/gitx/issues",
+  "keywords": [
+    "oclif"
+  ],
+  "types": "dist/index.d.ts"
+}
