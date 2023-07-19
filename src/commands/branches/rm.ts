@@ -1,8 +1,7 @@
 import { Command } from "@oclif/core";
 import { simpleGit } from "simple-git";
 import checkbox from "@inquirer/checkbox";
-import * as colors from "@colors/colors";
-import { Color } from "@colors/colors";
+import colors from "@colors/colors/safe";
 
 export default class Rm extends Command {
   static description =
@@ -39,11 +38,12 @@ export default class Rm extends Command {
       const branchList = this.formatBranchList(selectedBranches, colors.green);
       this.log("Successfully removed the following branches:", branchList);
     }
-
-    // this.log("branches world! (./src/commands/branches/world.ts)");
   }
 
-  private formatBranchList(branches: string[], colour: Color): string {
+  private formatBranchList(
+    branches: string[],
+    colour: (str: string) => string,
+  ): string {
     return branches.map((b) => colour(`"${b}"`)).join(", ");
   }
 }
