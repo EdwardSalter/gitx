@@ -1,7 +1,8 @@
-import { Command } from "@oclif/core";
+import { Args, Command } from "@oclif/core";
 import { simpleGit } from "simple-git";
 import checkbox from "@inquirer/checkbox";
 import colors from "@colors/colors/safe";
+import { ArgInput } from "@oclif/core/lib/interfaces/parser";
 
 export default class Rm extends Command {
   static description =
@@ -11,10 +12,19 @@ export default class Rm extends Command {
 
   static flags = {};
 
-  static args = {};
+  static args: ArgInput = {
+    repo: Args.directory({
+      description:
+        "The path to the git repository. Defaults to the current directory.",
+      required: false,
+      default: ".",
+    }),
+  };
 
   async run(): Promise<void> {
-    const repo = simpleGit();
+    const { args } = await this.parse(Rm);
+
+    const repo = simpleGit(args.repo);
     const branches = await repo.branchLocal();
     // console.log(branches);
 
@@ -26,17 +36,23 @@ export default class Rm extends Command {
         disabled: branch === branches.current,
       })),
     });
-
-    const result = await repo.deleteLocalBranches(selectedBranches);
-    if (!result.success) {
-      const branchList = this.formatBranchList(
-        result.errors.map((err) => err.branch),
-        colors.red,
-      );
-      this.log("Failed to remove the following branches:", branchList);
-    } else {
-      const branchList = this.formatBranchList(selectedBranches, colors.green);
-      this.log("Successfully removed the following branches:", branchList);
+    try {
+      const result = await repo.deleteLocalBranches(selectedBranches);
+      if (!result.success) {
+        const branchList = this.formatBranchList(
+          result.errors.map((err) => err.branch),
+          colors.red,
+        );
+        this.log("Failed to remove the following branches:", branchList);
+      } else {
+        const branchList = this.formatBranchList(
+          selectedBranches,
+          colors.green,
+        );
+        this.log("Successfully removed the following branches:", branchList);
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
